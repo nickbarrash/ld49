@@ -30,15 +30,15 @@ public class BlockLevelSimple : BlockLevel
 
     private GameObject GetPrefab()
     {
-        return prefabs[(int)(UnityEngine.Random.value * prefabs.Count)];
+        return prefabs[(int)(ConsistentRandom.NextRandom() * prefabs.Count)];
     }
 
     public override GameObject CreateBlock() {
         var tmpBlock = BlockClickSpawner.Instantiate(GetPrefab(), BlockClickSpawner.instance.transform);
         tmpBlock.name = $"Block_{BlockClickSpawner.instance.blocks.Count}";
         tmpBlock.transform.localScale = new Vector3(
-            Mathf.Lerp(minWidth, maxWidth, UnityEngine.Random.value),
-            Mathf.Lerp(minHeight, maxHeight, UnityEngine.Random.value),
+            Mathf.Lerp(minWidth, maxWidth, ConsistentRandom.NextRandom()),
+            Mathf.Lerp(minHeight, maxHeight, ConsistentRandom.NextRandom()),
             1
         );
         tmpBlock.GetComponent<Block>().Start();

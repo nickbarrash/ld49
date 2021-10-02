@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    private const float CAMERA_ABOVE_MAX_HEIGHT = 1.5f;
+    private const float CAMERA_ABOVE_MAX_HEIGHT = 1.3f;
     private const float ZOOM_SPEED = 1.02f;
     private const float PAN_SPEED_FACTOR = 0.5f;
     private const float BASELINE_HEIGHT = -1f;
 
     public static CameraZoom instance;
     Camera mainCam;
-    float zoomHeight = 9;
+    float zoomHeight = 5;
 
     private float initialSize;
     private float initialYOffset;

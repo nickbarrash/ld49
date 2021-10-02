@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameOverUI : MonoBehaviour
 {
     public static GameOverUI instance;
+    bool started = false;
 
     private void Awake() {
         if (instance != null)
@@ -17,11 +18,17 @@ public class GameOverUI : MonoBehaviour
     }
 
     private void Start() {
-        SetVisible(false);
+        if (!started)
+        {
+            SetVisible(false);
+            started = true;
+        }
+
     }
 
     public void SetVisible(bool isVisible)
     {
         gameObject.SetActive(isVisible);
+        started = true;
     }
 }

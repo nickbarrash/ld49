@@ -43,9 +43,10 @@ public class ScoreTracker : MonoBehaviour
         gameCount++;
 
         // set scoring;
+        this.height = 0;
         SetHeight(0f);
 
-        blocks = 0;
+        this.blocks = 0;
         SetCount(false);
         gameInProgress = true;
     }

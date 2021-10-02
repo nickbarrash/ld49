@@ -6,7 +6,7 @@ using UnityEngine;
 public class BlockClickSpawner : MonoBehaviour
 {
     private const int BLOCKS_PER_LEVEL = 10;
-    private const int RANDOM_SEED = 57; //55
+    private const float ROTATE_SPEED = 0.5f;
 
     public static BlockClickSpawner instance;
 
@@ -37,9 +37,9 @@ public class BlockClickSpawner : MonoBehaviour
     {
         levels = new List<BlockLevel> {
             new BlockLevelSimple(blockPrefab),
-            new BlockLevelSimple(blockPrefab, 0.5f, 2, 0.5f, 2),
+            new BlockLevelSimple(blockPrefab, 0.25f, 2, 0.25f, 2),
             new BlockLevelSimple(blockPrefab, 1, 1, 1, 1, BlockColors.BLUE),
-            new BlockLevelSimple(blockPrefab, 0.2f, 5, 0.2f, 5),
+            new BlockLevelSimple(blockPrefab, 0.2f, 4, 0.2f, 4),
         };
     }
 
@@ -66,8 +66,6 @@ public class BlockClickSpawner : MonoBehaviour
             Destroy(block.gameObject);
         }
 
-        Random.InitState(RANDOM_SEED);
-
         blocks.Clear();
 
         if (nextBlock == null)
@@ -81,15 +79,28 @@ public class BlockClickSpawner : MonoBehaviour
             NextBlock();
         }
 
+        if (Input.GetKey(KeyCode.W))
+        {
+            RotateNextBlock(true);
+        } else if (Input.GetKey(KeyCode.Q)) {
+            RotateNextBlock(false);
+        }
+
         if (nextBlock != null)
         {
             nextBlock.transform.position = InputUtility.instance.MouseToWorldZeroed();
         }
     }
 
+    public void RotateNextBlock(bool clockwise)
+    {
+        if (ScoreTracker.instance.gameInProgress && nextBlock != null )
+            nextBlock.transform.Rotate(Vector3.forward, clockwise ? -1 * ROTATE_SPEED : ROTATE_SPEED);
+    }
+
     public static BlockColors RandomColor()
     {
-        return (BlockColors)(int)(UnityEngine.Random.value * Block.REACTIVE_COLORS);
+        return (BlockColors)(int)(ConsistentRandom.NextRandom() * Block.REACTIVE_COLORS);
     }
 
     public void NextBlock(bool realize = true)
