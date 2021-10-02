@@ -12,11 +12,18 @@ public class ScoreTracker : MonoBehaviour
     [HideInInspector]
     public float height = 0;
 
+    public GameObject pbPanel;
+
+    public TMP_Text pbHeightValue;
+    public TMP_Text pbBlocksValue;
     public TMP_Text heightValue;
     public TMP_Text countValue;
 
     public bool gameInProgress = false;
     public int gameCount = 0;
+
+    public int personalHighScoreBlocks = -1;
+    public float personalHighScoreHeight = -1f;
 
     private void Awake() {
         if (instance != null)
@@ -31,12 +38,28 @@ public class ScoreTracker : MonoBehaviour
     }
 
     private void Start() {
+        pbPanel.SetActive(false);
         NewGame();
     }
 
     public void GameOver()
     {
         gameInProgress = false;
+        SaveScore();
+    }
+
+    public void SaveScore()
+    {
+        personalHighScoreBlocks = Mathf.Max(blocks, personalHighScoreBlocks);
+        personalHighScoreHeight = Mathf.Max(height, personalHighScoreHeight);    
+
+        if (personalHighScoreHeight > -1)
+            pbPanel.SetActive(true);
+        else
+            pbPanel.SetActive(false);
+
+        pbHeightValue.text = personalHighScoreHeight.ToString("F2");
+        pbBlocksValue.text = personalHighScoreBlocks.ToString();
     }
 
     public void NewGame() {
