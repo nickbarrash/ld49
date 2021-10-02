@@ -13,6 +13,7 @@ public class CameraZoom : MonoBehaviour
     Camera mainCam;
     float zoomHeight = 5;
 
+    private float initialHeight;
     private float initialSize;
     private float initialYOffset;
 
@@ -28,6 +29,18 @@ public class CameraZoom : MonoBehaviour
         mainCam = Camera.main;
         initialSize = mainCam.orthographicSize;
         initialYOffset = mainCam.transform.position.y;
+        initialHeight = zoomHeight;
+    }
+
+    public void NewGame()
+    {
+        zoomHeight = initialHeight;
+        mainCam.orthographicSize = initialSize;
+        mainCam.transform.position = new Vector3(
+            mainCam.transform.position.x,
+            initialYOffset,
+            mainCam.transform.position.z
+        );
     }
 
     public void FixedUpdate() {

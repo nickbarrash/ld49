@@ -19,7 +19,9 @@ public class BlockClickSpawner : MonoBehaviour
 
     public TMP_Text levelLabel;
     public TMP_Text remainingBlocksLabel;
+    public GameObject gameStartPanel;
 
+    public bool placingFirstBlock = false;
 
     private void Awake() {
         if (instance != null)
@@ -70,6 +72,8 @@ public class BlockClickSpawner : MonoBehaviour
 
         if (nextBlock == null)
             NextBlock(false);
+
+        SetPlacingFirstBlock(true);
     }
 
     // Update is called once per frame
@@ -116,6 +120,7 @@ public class BlockClickSpawner : MonoBehaviour
         nextBlock.transform.position = InputUtility.instance.MouseToWorldZeroed();
 
         UpdateUI();
+        SetPlacingFirstBlock(false);
     }
 
     public GameObject CreateBlock()
@@ -142,5 +147,11 @@ public class BlockClickSpawner : MonoBehaviour
 
         var remainingBlocks = GetBlocksRemaining();
         remainingBlocksLabel.text = remainingBlocks == -1 ? "∞" : (BLOCKS_PER_LEVEL - remainingBlocks).ToString();
+    }
+
+    public void SetPlacingFirstBlock(bool isPlacing)
+    {
+        placingFirstBlock = isPlacing;
+        gameStartPanel.SetActive(isPlacing);
     }
 }

@@ -25,5 +25,6 @@ public class GameManager : MonoBehaviour
         ScoreTracker.instance.NewGame();
         BlockClickSpawner.instance.NewGame();
         GameOverUI.instance.SetVisible(false);
+        CameraZoom.instance.NewGame();
     }
 }
