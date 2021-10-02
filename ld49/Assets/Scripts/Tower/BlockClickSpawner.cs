@@ -1,16 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BlockClickSpawner : MonoBehaviour
 {
+    private const int BLOCKS_PER_LEVEL = 10;
+    private const int RANDOM_SEED = 57; //55
+
     public static BlockClickSpawner instance;
 
     public GameObject blockPrefab;
 
     private GameObject nextBlock;
-    private GameObject tmpBlock;
-    private List<Block> blocks = new List<Block>();
+    public List<Block> blocks = new List<Block>();
+
+    public List<BlockLevel> levels;
+
+    public TMP_Text levelLabel;
+    public TMP_Text remainingBlocksLabel;
+
 
     private void Awake() {
         if (instance != null)
@@ -20,6 +29,18 @@ public class BlockClickSpawner : MonoBehaviour
         }
 
         instance = this;
+
+        InitLevels();
+    }
+
+    private void InitLevels()
+    {
+        levels = new List<BlockLevel> {
+            new BlockLevelSimple(blockPrefab),
+            new BlockLevelSimple(blockPrefab, 0.5f, 2, 0.5f, 2),
+            new BlockLevelSimple(blockPrefab, 1, 1, 1, 1, BlockColors.BLUE),
+            new BlockLevelSimple(blockPrefab, 0.2f, 5, 0.2f, 5),
+        };
     }
 
     private void Start() {
@@ -45,10 +66,12 @@ public class BlockClickSpawner : MonoBehaviour
             Destroy(block.gameObject);
         }
 
+        Random.InitState(RANDOM_SEED);
+
         blocks.Clear();
 
         if (nextBlock == null)
-            nextBlock = CreateBlock(InputUtility.instance.MouseToWorldZeroed());
+            NextBlock(false);
     }
 
     // Update is called once per frame
@@ -64,27 +87,49 @@ public class BlockClickSpawner : MonoBehaviour
         }
     }
 
-    public BlockColors RandomColor()
+    public static BlockColors RandomColor()
     {
-        return (BlockColors)Random.Range(0, Block.REACTIVE_COLORS);
+        return (BlockColors)(int)(UnityEngine.Random.value * Block.REACTIVE_COLORS);
     }
 
-    public void NextBlock()
+    public void NextBlock(bool realize = true)
     {
-        var currentBlock = nextBlock.GetComponent<Block>();
-        currentBlock.Realize(ScoreTracker.instance.gameCount);
-        blocks.Add(currentBlock);
+        if (realize)
+        {
+            var currentBlock = nextBlock.GetComponent<Block>();
+            currentBlock.Realize(ScoreTracker.instance.gameCount);
+            blocks.Add(currentBlock);
+        }
 
-        nextBlock = CreateBlock(InputUtility.instance.MouseToWorldZeroed());
+        nextBlock = CreateBlock();
+        nextBlock.transform.position = InputUtility.instance.MouseToWorldZeroed();
+
+        UpdateUI();
     }
 
-    public GameObject CreateBlock(Vector2 position)
+    public GameObject CreateBlock()
     {
-        tmpBlock = Instantiate(blockPrefab, transform);
-        tmpBlock.name = $"Point_{blocks.Count}";
-        tmpBlock.transform.position = position;
-        tmpBlock.GetComponent<Block>().Start();
-        tmpBlock.GetComponent<Block>().SetColor(RandomColor(), false);
-        return tmpBlock;
+        return levels[GetLevel()].CreateBlock();
+    }
+
+    private int GetLevel() // index
+    {
+        return Mathf.Min(blocks.Count / BLOCKS_PER_LEVEL, levels.Count - 1);
+    }
+
+    private int GetBlocksRemaining()
+    {
+        if (GetLevel() + 1>= levels.Count)
+            return -1;
+
+        return blocks.Count % BLOCKS_PER_LEVEL;
+    }
+
+    public void UpdateUI()
+    {
+        levelLabel.text = (GetLevel() + 1).ToString();
+
+        var remainingBlocks = GetBlocksRemaining();
+        remainingBlocksLabel.text = remainingBlocks == -1 ? "∞" : remainingBlocks.ToString();
     }
 }

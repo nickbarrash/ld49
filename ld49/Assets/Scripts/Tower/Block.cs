@@ -129,14 +129,20 @@ public class Block : MonoBehaviour
     {
         SetDelayedColor(NextColor(first));
         SetColor(BlockColors.INERT);
-        rb.AddForce(Settings.instance.BLOCK_COLLISION_FORCE_FACTOR * ((Vector2)transform.position - otherCenter).normalized, ForceMode2D.Impulse);
+        rb.AddForce(
+            Settings.instance.BLOCK_COLLISION_FORCE_FACTOR
+                * transform.localScale.x
+                * transform.localScale.y
+                *((Vector2)transform.position - otherCenter).normalized,
+            ForceMode2D.Impulse
+        );
 
     }
 
     private void Update() {
         if (spawned && collided && (Time.frameCount - spawnFrame) % 10 == 0 && maxMovingHeight < transform.position.y)
         {
-            maxMovingHeight = transform.position.y;
+            maxMovingHeight = transform.position.y + Mathf.Max(transform.localScale.x, transform.localScale.y);
             CameraZoom.instance.ProcessHeight(maxMovingHeight);
         }
     }
