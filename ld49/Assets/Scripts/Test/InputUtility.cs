@@ -8,7 +8,7 @@ public class InputUtility: MonoBehaviour
 
     Camera mainCam;
 
-    public void Start() {
+    public void Awake() {
         mainCam = Camera.main;
 
         if (instance != null)
