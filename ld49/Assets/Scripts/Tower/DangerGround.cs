@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class DangerGround : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision) {
-        Debug.Log("Game over");
+    public BlockClickSpawner blockSpawner;
+
+    public void GameOver()
+    {
+        ScoreTracker.instance.GameOver();
+        blockSpawner.GameOver();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (ScoreTracker.instance.gameInProgress && collision.gameObject.TryGetComponent<Block>(out _))
+        {
+            GameOver();
+        }
     }
 }

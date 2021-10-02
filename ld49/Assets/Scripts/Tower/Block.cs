@@ -13,6 +13,9 @@ public enum BlockColors
 public class Block : MonoBehaviour
 {
     private const float INERT_TIME = 1f;
+    private const float SCORE_CHECK_INTERVAL = 1.2f;
+    private const float POSITION_DIFFERENCE_THRESHOLD = 0.1f;
+    private const int SCORE_PASS_INTERVALS = 3;
     
     public const int REACTIVE_COLORS = 3;
 
@@ -24,15 +27,48 @@ public class Block : MonoBehaviour
     };
 
     SpriteRenderer spriteRenderer;
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     private BlockColors color;
     private bool spawned;
+    
+    // Score check
+    private Vector2 position = new Vector2(float.MaxValue, float.MaxValue);
+    private int checksPassed;
+    private float maxHeight = float.MinValue;
+    private bool incrementedScoreCount = false;
+
+    public void CheckScore()
+    {
+        if ((position - (Vector2)transform.position).magnitude < POSITION_DIFFERENCE_THRESHOLD)
+        {
+            if (++checksPassed > SCORE_PASS_INTERVALS)
+            {
+                if (maxHeight < transform.position.y)
+                {
+                    maxHeight = transform.position.y;
+                    ScoreTracker.instance.SetHeight(maxHeight);
+                }
+
+                if (!incrementedScoreCount)
+                {
+                    incrementedScoreCount = true;
+                    ScoreTracker.instance.SetCount();
+                }
+            }
+        }
+        else
+        {
+            checksPassed = 0;
+        }
+        position = transform.position;
+    }
 
     public void Realize()
     {
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         rb.simulated = true;
+        InvokeRepeating("CheckScore", 0f, SCORE_CHECK_INTERVAL);
     }
 
     public void Start() {
