@@ -6,7 +6,7 @@ using UnityEngine;
 public class BlockClickSpawner : MonoBehaviour
 {
     private const int BLOCKS_PER_LEVEL = 10;
-    private const float ROTATE_SPEED = 0.5f;
+    private const float ROTATE_SPEED = 0.75f;
 
     public static BlockClickSpawner instance;
 
@@ -141,6 +141,6 @@ public class BlockClickSpawner : MonoBehaviour
         levelLabel.text = (GetLevel() + 1).ToString();
 
         var remainingBlocks = GetBlocksRemaining();
-        remainingBlocksLabel.text = remainingBlocks == -1 ? "∞" : remainingBlocks.ToString();
+        remainingBlocksLabel.text = remainingBlocks == -1 ? "∞" : (BLOCKS_PER_LEVEL - remainingBlocks).ToString();
     }
 }
