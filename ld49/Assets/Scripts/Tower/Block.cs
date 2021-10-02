@@ -13,9 +13,9 @@ public enum BlockColors
 public class Block : MonoBehaviour
 {
     private const float INERT_TIME = 1f;
-    private const float SCORE_CHECK_INTERVAL = 1.2f;
+    private const float SCORE_CHECK_INTERVAL = 0.4f;
     private const float POSITION_DIFFERENCE_THRESHOLD = 0.1f;
-    private const int SCORE_PASS_INTERVALS = 3;
+    private const int SCORE_PASS_INTERVALS = 2;
     
     public const int REACTIVE_COLORS = 3;
 
@@ -31,13 +31,21 @@ public class Block : MonoBehaviour
 
     private BlockColors color;
     private bool spawned;
+    private bool collided = false;
+    private int spawnFrame = -1;
     
     // Score check
     private Vector2 position = new Vector2(float.MaxValue, float.MaxValue);
     private int checksPassed;
     private float maxHeight = float.MinValue;
+    private float maxMovingHeight = float.MinValue;
     private bool incrementedScoreCount = false;
     private int gameCount = -1;
+
+    public bool IsStable()
+    {
+        return spawned && checksPassed >= SCORE_PASS_INTERVALS;
+    }
 
     public void CheckScore()
     {
@@ -46,7 +54,8 @@ public class Block : MonoBehaviour
 
         if ((position - (Vector2)transform.position).magnitude < POSITION_DIFFERENCE_THRESHOLD)
         {
-            if (++checksPassed > SCORE_PASS_INTERVALS)
+            checksPassed++;
+            if (IsStable())
             {
                 if (maxHeight < transform.position.y)
                 {
@@ -77,6 +86,8 @@ public class Block : MonoBehaviour
     {
         this.gameCount = gameCount;
 
+        spawnFrame = Time.frameCount;
+        spawned = true;
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         rb.simulated = true;
         InvokeRepeating("CheckScore", 0f, SCORE_CHECK_INTERVAL);
@@ -122,14 +133,25 @@ public class Block : MonoBehaviour
 
     }
 
+    private void Update() {
+        if (spawned && collided && (Time.frameCount - spawnFrame) % 10 == 0 && maxMovingHeight < transform.position.y)
+        {
+            maxMovingHeight = transform.position.y;
+            CameraZoom.instance.ProcessHeight(maxMovingHeight);
+        }
+    }
+
     void OnCollisionStay2D(Collision2D collision) {
         Block otherBlock;
-        if (color != BlockColors.INERT
-            && collision.gameObject.TryGetComponent<Block>(out otherBlock)
-            && otherBlock.color == color)
+        if (spawned && collision.gameObject.TryGetComponent<Block>(out otherBlock) && otherBlock.IsStable())
         {
-            Impulse(collision.transform.position, true);
-            otherBlock.Impulse(transform.position, false);
+            collided = true;
+
+            if (color != BlockColors.INERT && otherBlock.color == color)
+            {
+                Impulse(collision.transform.position, true);
+                otherBlock.Impulse(transform.position, false);
+            }
         }
     }
 }

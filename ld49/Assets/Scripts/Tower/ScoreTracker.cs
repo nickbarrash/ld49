@@ -53,7 +53,7 @@ public class ScoreTracker : MonoBehaviour
     public void SetHeight(float height)
     {
         this.height = Mathf.Max(this.height, height);
-        heightValue.text = height.ToString("F2");
+        heightValue.text = this.height.ToString("F2");
     }
 
     public void SetCount(bool increment = true)
