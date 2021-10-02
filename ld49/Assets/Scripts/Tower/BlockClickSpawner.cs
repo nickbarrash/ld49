@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class BlockClickSpawner : MonoBehaviour
 {
+    public static BlockClickSpawner instance;
+
     public GameObject blockPrefab;
 
     private GameObject nextBlock;
     private GameObject tmpBlock;
     private List<Block> blocks = new List<Block>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    private void Awake() {
+        if (instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+
+        instance = this;
+    }
+
+    private void Start() {
         NewGame();
     }
 
@@ -20,10 +30,11 @@ public class BlockClickSpawner : MonoBehaviour
     {
         foreach(var block in blocks)
         {
+            block.GameOver();
             block.rb.simulated = false;
         }
 
-        Destroy(nextBlock);
+        Destroy(nextBlock.gameObject);
         nextBlock = null;
     }
 
@@ -31,10 +42,13 @@ public class BlockClickSpawner : MonoBehaviour
     {
         foreach(var block in blocks)
         {
-            Destroy(block);
+            Destroy(block.gameObject);
         }
 
-        nextBlock = CreateBlock(InputUtility.instance.MouseToWorldZeroed());
+        blocks.Clear();
+
+        if (nextBlock == null)
+            nextBlock = CreateBlock(InputUtility.instance.MouseToWorldZeroed());
     }
 
     // Update is called once per frame
@@ -58,7 +72,7 @@ public class BlockClickSpawner : MonoBehaviour
     public void NextBlock()
     {
         var currentBlock = nextBlock.GetComponent<Block>();
-        currentBlock.Realize();
+        currentBlock.Realize(ScoreTracker.instance.gameCount);
         blocks.Add(currentBlock);
 
         nextBlock = CreateBlock(InputUtility.instance.MouseToWorldZeroed());

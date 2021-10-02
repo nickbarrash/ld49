@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class DangerGround : MonoBehaviour
 {
-    public BlockClickSpawner blockSpawner;
-
     public void GameOver()
     {
         ScoreTracker.instance.GameOver();
-        blockSpawner.GameOver();
+        BlockClickSpawner.instance.GameOver();
+        GameOverUI.instance.SetVisible(true);
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {

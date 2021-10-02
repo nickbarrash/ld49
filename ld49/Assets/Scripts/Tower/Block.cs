@@ -37,9 +37,13 @@ public class Block : MonoBehaviour
     private int checksPassed;
     private float maxHeight = float.MinValue;
     private bool incrementedScoreCount = false;
+    private int gameCount = -1;
 
     public void CheckScore()
     {
+        if (!ScoreTracker.instance.gameInProgress || ScoreTracker.instance.gameCount != gameCount)
+            return;
+
         if ((position - (Vector2)transform.position).magnitude < POSITION_DIFFERENCE_THRESHOLD)
         {
             if (++checksPassed > SCORE_PASS_INTERVALS)
@@ -64,8 +68,15 @@ public class Block : MonoBehaviour
         position = transform.position;
     }
 
-    public void Realize()
+    public void GameOver()
     {
+        CancelInvoke();
+    }
+
+    public void Realize(int gameCount)
+    {
+        this.gameCount = gameCount;
+
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         rb.simulated = true;
         InvokeRepeating("CheckScore", 0f, SCORE_CHECK_INTERVAL);

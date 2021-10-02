@@ -16,8 +16,9 @@ public class ScoreTracker : MonoBehaviour
     public TMP_Text countValue;
 
     public bool gameInProgress = false;
+    public int gameCount = 0;
 
-    private void Start() {
+    private void Awake() {
         if (instance != null)
         {
             Destroy(this);
@@ -29,12 +30,19 @@ public class ScoreTracker : MonoBehaviour
         NewGame();
     }
 
+    private void Start() {
+        NewGame();
+    }
+
     public void GameOver()
     {
         gameInProgress = false;
     }
 
     public void NewGame() {
+        gameCount++;
+
+        // set scoring;
         SetHeight(0f);
 
         blocks = 0;
