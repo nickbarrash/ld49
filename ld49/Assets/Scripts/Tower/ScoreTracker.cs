@@ -60,6 +60,8 @@ public class ScoreTracker : MonoBehaviour
 
         pbHeightValue.text = personalHighScoreHeight.ToString("F2");
         pbBlocksValue.text = personalHighScoreBlocks.ToString();
+
+        Leaderboard.instance.DisplaySubmit();
     }
 
     public void NewGame() {
