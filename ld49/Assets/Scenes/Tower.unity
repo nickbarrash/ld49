@@ -2630,7 +2630,17 @@ MonoBehaviour:
   blockPrefab: {fileID: 8842867741130853379, guid: da58d2c1dde491443aaa8ee426d93f2e,
     type: 3}
   otherShapePrefabs:
-  - {fileID: 5142301567609262279, guid: 63648ff072dc9084c895f4eb9eb99496, type: 3}
+  - {fileID: 7936111191627706282, guid: 0a235e2983b39104b8e738989767a682, type: 3}
+  - {fileID: 1922026257446018894, guid: 950e2ee1be11da944a56a98075a78d12, type: 3}
+  - {fileID: 6528178554512887211, guid: b424950d0b1f8b04087758d22430b215, type: 3}
+  - {fileID: 7954580693169705953, guid: 2ab265bc41b66f34b88998f94f932cdc, type: 3}
+  - {fileID: 5297220334999251674, guid: 63648ff072dc9084c895f4eb9eb99496, type: 3}
+  - {fileID: 1421815555669156228, guid: c20b17bed827c444ba0a42122e7ed6cb, type: 3}
+  - {fileID: 8821051502577580817, guid: 07fd81f17b6cb6c4899f22d8046e61a3, type: 3}
+  - {fileID: 493792195413547850, guid: 4344e685211dbd040b3741fc1afed95c, type: 3}
+  - {fileID: 6950961724200449809, guid: 3e9d902c21888e441adcf097438e9c80, type: 3}
+  - {fileID: 5702516877611131752, guid: d95884719e10faa44a11b6674bfa5a03, type: 3}
+  - {fileID: 1538459295094359088, guid: 2a0ac5274c0b83c47b9b39ce16b510af, type: 3}
   blocks: []
   scorePanel: {fileID: 613161652}
   levelLabel: {fileID: 1857226088}

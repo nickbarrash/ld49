@@ -64,7 +64,17 @@ public class Block : MonoBehaviour
 
     public virtual void SetRenderers()
     {
-        spriteRenderers = new List<SpriteRenderer> {GetComponent<SpriteRenderer>()};
+        spriteRenderers = new List<SpriteRenderer> {};
+
+        SpriteRenderer blockRenderer;
+        if(TryGetComponent(out blockRenderer))
+            spriteRenderers.Add(blockRenderer);
+
+        var shapes = transform.Find("Shapes");
+        if (shapes != null)
+        {
+            spriteRenderers.AddRange(shapes.GetComponentsInChildren<SpriteRenderer>());
+        }
     }
 
     public void SetState()
@@ -196,9 +206,10 @@ public class Block : MonoBehaviour
         SetColor(BlockColors.INERT);
         rb.AddForce(
             Settings.instance.BLOCK_COLLISION_FORCE_FACTOR
-                * transform.localScale.x
-                * transform.localScale.y
-                *((Vector2)transform.position - otherCenter).normalized,
+                //* transform.localScale.x
+                //* transform.localScale.y
+                * rb.mass
+                * ((Vector2)transform.position - otherCenter).normalized,
             ForceMode2D.Impulse
         );
 
@@ -212,17 +223,25 @@ public class Block : MonoBehaviour
         }
     }
 
+    public void ProcessCollidedBlocks(Block other)
+    {
+        if (!other.spawned)
+            return;
+
+        collided = true;
+
+        if (color != BlockColors.INERT && other.color == color)
+        {
+            Impulse(other.gameObject.transform.position, true);
+            other.Impulse(transform.position, false);
+        }
+    }
+
     void OnCollisionStay2D(Collision2D collision) {
         Block otherBlock;
-        if (spawned && collision.gameObject.TryGetComponent<Block>(out otherBlock) && otherBlock.IsStable())
+        if (spawned && collision.gameObject.TryGetComponent<Block>(out otherBlock))
         {
-            collided = true;
-
-            if (color != BlockColors.INERT && otherBlock.color == color)
-            {
-                Impulse(collision.transform.position, true);
-                otherBlock.Impulse(transform.position, false);
-            }
+            ProcessCollidedBlocks(otherBlock);
         }
     }
 }

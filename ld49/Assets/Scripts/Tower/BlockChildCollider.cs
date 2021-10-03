@@ -13,5 +13,17 @@ public class BlockChildCollider : MonoBehaviour
     void OnCollisionStay2D(Collision2D collision) {
         if (!block.spawned)
             return;
+
+        Block otherBlock;
+        if (collision.gameObject.TryGetComponent<Block>(out otherBlock))
+        {
+            block.ProcessCollidedBlocks(otherBlock);
+        }
+
+        BlockChildCollider otherBlockChild;
+        if (collision.gameObject.TryGetComponent<BlockChildCollider>(out otherBlockChild))
+        {
+            block.ProcessCollidedBlocks(otherBlockChild.block);
+        }
     }
 }

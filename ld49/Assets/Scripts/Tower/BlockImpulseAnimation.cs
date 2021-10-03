@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class BlockImpulseAnimation : MonoBehaviour
 {
-    public const float ANIMATION_SPEED = 100f;
+    public const float ANIMATION_SPEED = 80f;
 
-    public SpriteRenderer boxColor;
     public Block block;
 
     public Color impulseColor1;
@@ -20,8 +19,7 @@ public class BlockImpulseAnimation : MonoBehaviour
     {
         if (block.color == BlockColors.INERT && ScoreTracker.instance.gameInProgress)
         {
-            if (boxColor != null)
-                boxColor.color = Color.Lerp(impulseColor1, impulseColor2, AnimValue);
+            block.SetColor(Color.Lerp(impulseColor1, impulseColor2, AnimValue));
         }
     }
 }

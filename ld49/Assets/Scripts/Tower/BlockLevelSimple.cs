@@ -14,6 +14,23 @@ public class BlockLevelSimple : BlockLevel
 
     public BlockLevelSimple(
         string description,
+        List<GameObject> prefabs,
+        float minWidth = 1,
+        float maxWidth = 1,
+        float minHeight = 1,
+        float maxHeight = 1,
+        BlockColors setColor = BlockColors.INERT
+    ) : base(prefabs, description) {
+
+        this.minWidth = minWidth;
+        this.maxWidth = maxWidth;
+        this.minHeight = minHeight;
+        this.maxHeight = maxHeight;
+        this.setColor = setColor;
+    }
+
+    public BlockLevelSimple(
+        string description,
         GameObject prefab,
         float minWidth = 1,
         float maxWidth = 1,

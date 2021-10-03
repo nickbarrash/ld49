@@ -12,7 +12,7 @@ public class ConsistentRandom : MonoBehaviour
 
     public static float NextRandom()
     {
-        var val = Random.value;
+        var val = Random.Range(0f, 1f);
         //Debug.Log($"Random: {val}");
         return val;
     }

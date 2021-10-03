@@ -49,10 +49,13 @@ public class BlockClickSpawner : MonoBehaviour
     private void InitLevels()
     {
         levels = new List<BlockLevel> {
-            new BlockLevelSimple("Basic blocks", blockPrefab/*otherShapePrefabs[0]*/),
+            new BlockLevelSimple("Basic blocks", blockPrefab),
             new BlockLevelSimple("Funky blocks", blockPrefab, 0.3f, 2.5f, 0.3f, 2.5f),
             new BlockLevelSimple("Blue blocks", blockPrefab, 1, 1, 1, 1, BlockColors.BLUE),
-            new BlockLevelSimple("Funkier blocks", blockPrefab, 0.3f, 5, 0.3f, 5),
+            //new BlockLevelSimple("Funky shapes", otherShapePrefabs, 0.3f, 5, 0.3f, 5),
+            new BlockLevelSimple("Funky shapes", otherShapePrefabs),
+            new BlockLevelSimple("Respite", blockPrefab),
+            new BlockLevelSimple("Blue funky shapes", otherShapePrefabs, 0.75f, 1.25f, 0.75f, 1.25f, BlockColors.BLUE),
         };
     }
 
