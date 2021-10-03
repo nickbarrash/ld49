@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum BlockColors
@@ -27,14 +28,17 @@ public class Block : MonoBehaviour
         {BlockColors.INERT, Color.green}
     };
 
-    SpriteRenderer spriteRenderer;
+    List<SpriteRenderer> spriteRenderers;
 
     [HideInInspector]
     public Rigidbody2D rb;
 
     public BlockColors color;
-    private bool spawned;
-    private bool collided = false;
+    [HideInInspector]
+    public bool spawned;
+    [HideInInspector]
+    public bool collided = false;
+    [HideInInspector]
     public int spawnFrame = -1;
     
     // Score check
@@ -44,6 +48,7 @@ public class Block : MonoBehaviour
     private float maxMovingHeight = float.MinValue;
     private bool incrementedScoreCount = false;
     private int gameCount = -1;
+    private Color tmpColor;
 
     // state info
     public GameObject stateParent;
@@ -52,9 +57,14 @@ public class Block : MonoBehaviour
     public GameObject unstableAffordance;
 
     public void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        SetRenderers();
         rb = GetComponent<Rigidbody2D>();
         SetState();
+    }
+
+    public virtual void SetRenderers()
+    {
+        spriteRenderers = new List<SpriteRenderer> {GetComponent<SpriteRenderer>()};
     }
 
     public void SetState()
@@ -134,7 +144,9 @@ public class Block : MonoBehaviour
 
         spawnFrame = Time.frameCount;
         spawned = true;
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
+
+        SetColor(color, true);
+        //spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         rb.simulated = true;
         InvokeRepeating("CheckScore", 0f, SCORE_CHECK_INTERVAL);
         SetState();
@@ -144,7 +156,18 @@ public class Block : MonoBehaviour
     {
         this.color = color;
         var baseColor = BLOCK_COLOR_MAP[color];
-        spriteRenderer.color = new Color (baseColor.r, baseColor.g, baseColor.b, realized ? 1f : 0.2f);
+        if (!realized)
+            baseColor = new Color (baseColor.r, baseColor.g, baseColor.b, 0.2f);
+
+        SetColor(baseColor);
+    }
+
+    public virtual void SetColor(Color color)
+    {
+        foreach(var sr in spriteRenderers)
+        {
+            sr.color = color;
+        }
     }
 
     private void SetDelayedColor(BlockColors nextColor)

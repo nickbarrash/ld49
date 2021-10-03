@@ -20,7 +20,8 @@ public class BlockImpulseAnimation : MonoBehaviour
     {
         if (block.color == BlockColors.INERT && ScoreTracker.instance.gameInProgress)
         {
-             boxColor.color = Color.Lerp(impulseColor1, impulseColor2, AnimValue);
+            if (boxColor != null)
+                boxColor.color = Color.Lerp(impulseColor1, impulseColor2, AnimValue);
         }
     }
 }

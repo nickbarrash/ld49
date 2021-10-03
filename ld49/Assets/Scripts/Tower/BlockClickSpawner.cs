@@ -12,8 +12,10 @@ public class BlockClickSpawner : MonoBehaviour
     public static BlockClickSpawner instance;
 
     public GameObject blockPrefab;
+    public List<GameObject> otherShapePrefabs;
 
     private GameObject nextBlock;
+    [HideInInspector]
     public List<Block> blocks = new List<Block>();
 
     public List<BlockLevel> levels;
@@ -25,8 +27,11 @@ public class BlockClickSpawner : MonoBehaviour
     public GameObject gameStartPanel;
     public GameObject leaderboard;
 
+    public LevelDescriptionDisplay levelDescription;
+
     public Fader clickToPlaceInstruction;
 
+    [HideInInspector]
     public bool placingFirstBlock = false;
 
     private void Awake() {
@@ -44,10 +49,10 @@ public class BlockClickSpawner : MonoBehaviour
     private void InitLevels()
     {
         levels = new List<BlockLevel> {
-            new BlockLevelSimple(blockPrefab),
-            new BlockLevelSimple(blockPrefab, 0.3f, 2.5f, 0.3f, 2.5f),
-            new BlockLevelSimple(blockPrefab, 1, 1, 1, 1, BlockColors.BLUE),
-            new BlockLevelSimple(blockPrefab, 0.3f, 5, 0.3f, 5),
+            new BlockLevelSimple("Basic blocks", blockPrefab/*otherShapePrefabs[0]*/),
+            new BlockLevelSimple("Funky blocks", blockPrefab, 0.3f, 2.5f, 0.3f, 2.5f),
+            new BlockLevelSimple("Blue blocks", blockPrefab, 1, 1, 1, 1, BlockColors.BLUE),
+            new BlockLevelSimple("Funkier blocks", blockPrefab, 0.3f, 5, 0.3f, 5),
         };
     }
 
@@ -127,6 +132,11 @@ public class BlockClickSpawner : MonoBehaviour
             var currentBlock = nextBlock.GetComponent<Block>();
             currentBlock.Realize(ScoreTracker.instance.gameCount);
             blocks.Add(currentBlock);
+
+            if (blocks.Count % BLOCKS_PER_LEVEL == 0 || blocks.Count == 1)
+            {
+                levelDescription.QueueDescription($"Level {GetLevel() + 1}: {levels[GetLevel()].description}");
+            }
         }
 
         nextBlock = CreateBlock();
