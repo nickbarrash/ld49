@@ -27,6 +27,8 @@ public class Block : MonoBehaviour
     };
 
     SpriteRenderer spriteRenderer;
+
+    [HideInInspector]
     public Rigidbody2D rb;
 
     private BlockColors color;
@@ -41,6 +43,47 @@ public class Block : MonoBehaviour
     private float maxMovingHeight = float.MinValue;
     private bool incrementedScoreCount = false;
     private int gameCount = -1;
+
+    // state info
+    public GameObject stateParent;
+    public GameObject stableAffordance;
+    public GameObject stabilizingAffordance;
+    public GameObject unstableAffordance;
+
+    public void Start() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        SetState();
+    }
+
+    public void SetState()
+    {
+        if (!spawned)
+        {
+            // hide
+            stateParent.SetActive(false);
+            return;
+        }
+
+        stableAffordance.SetActive(false);
+        stabilizingAffordance.SetActive(false);
+        unstableAffordance.SetActive(false);
+        stateParent.SetActive(true);
+
+        if (incrementedScoreCount)
+        {
+            stableAffordance.SetActive(true);
+            return;
+        }
+
+        if (checksPassed == 0)
+        {
+            unstableAffordance.SetActive(true);
+            return;
+        }
+
+        stabilizingAffordance.SetActive(true);
+    }
 
     public bool IsStable()
     {
@@ -75,6 +118,7 @@ public class Block : MonoBehaviour
             checksPassed = 0;
         }
         position = transform.position;
+        SetState();
     }
 
     public void GameOver()
@@ -91,11 +135,7 @@ public class Block : MonoBehaviour
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         rb.simulated = true;
         InvokeRepeating("CheckScore", 0f, SCORE_CHECK_INTERVAL);
-    }
-
-    public void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
+        SetState();
     }
 
     public void SetColor(BlockColors color, bool realized = true)
