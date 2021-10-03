@@ -130,6 +130,7 @@ public class Block : MonoBehaviour
                 if (!incrementedScoreCount)
                 {
                     incrementedScoreCount = true;
+                    AudioManager.instance.Play("lockin");
                     ScoreTracker.instance.SetCount();
                 }
             }
@@ -234,6 +235,7 @@ public class Block : MonoBehaviour
         {
             Impulse(other.gameObject.transform.position, true);
             other.Impulse(transform.position, false);
+            AudioManager.instance.Play("impulse");
         }
     }
 

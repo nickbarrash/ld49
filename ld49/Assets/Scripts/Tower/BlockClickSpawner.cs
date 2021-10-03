@@ -138,8 +138,13 @@ public class BlockClickSpawner : MonoBehaviour
 
             if (blocks.Count % BLOCKS_PER_LEVEL == 0 || blocks.Count == 1)
             {
+                if (blocks.Count != 1)
+                    AudioManager.instance.Play("levelup");
+
                 levelDescription.QueueDescription($"Level {GetLevel() + 1}: {levels[GetLevel()].description}");
             }
+
+            AudioManager.instance.Play("spawn");
         }
 
         nextBlock = CreateBlock();

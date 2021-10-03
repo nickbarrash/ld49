@@ -66,7 +66,7 @@ public class LevelDescriptionDisplay : MonoBehaviour {
         descriptionsToDisplay.Clear();
         activeDescription = null;
     }
-
+     
     private void FadeOut()
     {
         state = FADE_STATE.FADEOUT;

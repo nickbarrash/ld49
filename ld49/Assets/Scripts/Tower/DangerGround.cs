@@ -6,6 +6,7 @@ public class DangerGround : MonoBehaviour
 {
     public void GameOver()
     {
+        AudioManager.instance.Play("gameover");
         ScoreTracker.instance.GameOver();
         BlockClickSpawner.instance.GameOver();
         GameOverUI.instance.SetVisible(true);
