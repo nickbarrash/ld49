@@ -18,9 +18,14 @@ public class BlockClickSpawner : MonoBehaviour
 
     public List<BlockLevel> levels;
 
+    public GameObject scorePanel;
+
     public TMP_Text levelLabel;
     public TMP_Text remainingBlocksLabel;
     public GameObject gameStartPanel;
+    public GameObject leaderboard;
+
+    public Fader clickToPlaceInstruction;
 
     public bool placingFirstBlock = false;
 
@@ -60,10 +65,13 @@ public class BlockClickSpawner : MonoBehaviour
 
         Destroy(nextBlock.gameObject);
         nextBlock = null;
+        leaderboard.SetActive(true);
+        scorePanel.SetActive(false);
     }
 
     public void NewGame()
     {
+        scorePanel.SetActive(false);
         foreach(var block in blocks)
         {
             Destroy(block.gameObject);
@@ -133,7 +141,7 @@ public class BlockClickSpawner : MonoBehaviour
         return levels[GetLevel()].CreateBlock();
     }
 
-    private int GetLevel() // index
+    public int GetLevel() // index
     {
         return Mathf.Min(blocks.Count / BLOCKS_PER_LEVEL, levels.Count - 1);
     }
@@ -151,11 +159,18 @@ public class BlockClickSpawner : MonoBehaviour
         levelLabel.text = (GetLevel() + 1).ToString();
 
         var remainingBlocks = GetBlocksRemaining();
-        remainingBlocksLabel.text = remainingBlocks == -1 ? "∞" : (BLOCKS_PER_LEVEL - remainingBlocks).ToString();
+        var blockCountLabel = remainingBlocks == -1 ? "∞" : (BLOCKS_PER_LEVEL - remainingBlocks).ToString();
+        remainingBlocksLabel.text = $"(Next level in {blockCountLabel} blocks)";
     }
 
     public void SetPlacingFirstBlock(bool isPlacing)
     {
+        if (placingFirstBlock && !isPlacing) {
+            //    clickToPlaceInstruction.TriggerFade();
+            scorePanel.SetActive(true);
+            leaderboard.SetActive(false);
+        }
+
         placingFirstBlock = isPlacing;
         gameStartPanel.SetActive(isPlacing);
     }

@@ -52,11 +52,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Archivo-SemiBold-1
+  m_Name: h1
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 3417
   material: {fileID: 3788945502259077399}
-  materialHashCode: 0
+  materialHashCode: -615804967
   m_Version: 1.1.0
   m_SourceFontFileGUID: dc10e4565ebd94b4f97e884a0299a74c
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: dc10e4565ebd94b4f97e884a0299a74c,
@@ -2629,9 +2629,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.90909094
+    - _ScaleRatioB: 0.7386364
+    - _ScaleRatioC: 0.7386364
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

@@ -68,7 +68,7 @@ public class Leaderboard : MonoBehaviour
     public TMP_InputField leaderboardName;
     public Button leaderboardSubmitButton;
 
-
+    public GameObject newGamePanel;
 
     const string URL = "https://rg57ptiugd.execute-api.us-east-2.amazonaws.com/leaderboard";
     
@@ -94,8 +94,19 @@ public class Leaderboard : MonoBehaviour
 
     public void DisplaySubmit()
     {
-        leaderboardSubmissionPanel.SetActive(NewHighScore());
-        UpdateSubmitButton();
+        if (NewHighScore())
+        {
+            DisplayGameOver(false);
+            leaderboardSubmissionPanel.SetActive(NewHighScore());
+            UpdateSubmitButton();
+        } else {
+            DisplayGameOver(true);
+        }
+    }
+
+    public void DisplayGameOver(bool display)
+    {
+        newGamePanel.SetActive(display);
     }
 
     public bool NewHighScore()
@@ -122,8 +133,6 @@ public class Leaderboard : MonoBehaviour
         if (leaderboard.blocks.Count >= MAX_SCORES && leaderboard.blocks.Last().score > ScoreTracker.instance.blocks)
             return false;
 
-        if (leaderboard.blocks.Count > 0) Debug.Log($"Min Blocks: {leaderboard.blocks.Last()}");
-
         return true;
     }
 
@@ -140,7 +149,7 @@ public class Leaderboard : MonoBehaviour
         if (leaderboard != null)
         {
             heightNames.text = string.Join("\n", leaderboard.height.Select(s => s.name));
-            heightScores.text = string.Join("\n", leaderboard.height.Select(s => s.score));
+            heightScores.text = string.Join("\n", leaderboard.height.Select(s => (s.score * ScoreTracker.HEIGHT_ADJUST_FACTOR).ToString("F1") + "m"));
 
             blocksNames.text = string.Join("\n", leaderboard.blocks.Select(s => s.name));
             blocksScores.text = string.Join("\n", leaderboard.blocks.Select(s => s.score));
@@ -191,7 +200,7 @@ public class Leaderboard : MonoBehaviour
                 this,
                 URL,
                 (code, body) => {
-                    Debug.Log($"Leaderboard GET: {body}");
+                    //Debug.Log($"Leaderboard GET: {body}");
                     leaderboard = JsonUtility.FromJson<LeaderboardResponse>(body);
 
                     leaderboard.height = leaderboard.height.OrderByDescending(s => s.score).Take(MAX_SCORES).ToList();
@@ -218,7 +227,7 @@ public class Leaderboard : MonoBehaviour
                 URL,
                 payload,
                 (code, body) => {
-                    Debug.Log($"Leaderboard POST result: {body}");
+                    //Debug.Log($"Leaderboard POST result: {body}");
                     RefreshLeaderboard();
                 }
             );
