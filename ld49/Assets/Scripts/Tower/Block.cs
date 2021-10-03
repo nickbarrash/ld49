@@ -16,6 +16,7 @@ public class Block : MonoBehaviour
     private const float SCORE_CHECK_INTERVAL = 0.4f;
     private const float POSITION_DIFFERENCE_THRESHOLD = 0.1f;
     private const int SCORE_PASS_INTERVALS = 2;
+    public const float STATE_SCALE = 0.25f;
     
     public const int REACTIVE_COLORS = 3;
 
@@ -31,10 +32,10 @@ public class Block : MonoBehaviour
     [HideInInspector]
     public Rigidbody2D rb;
 
-    private BlockColors color;
+    public BlockColors color;
     private bool spawned;
     private bool collided = false;
-    private int spawnFrame = -1;
+    public int spawnFrame = -1;
     
     // Score check
     private Vector2 position = new Vector2(float.MaxValue, float.MaxValue);
@@ -124,6 +125,7 @@ public class Block : MonoBehaviour
     public void GameOver()
     {
         CancelInvoke();
+        SetColor(BlockClickSpawner.RandomColor());
     }
 
     public void Realize(int gameCount)

@@ -36,11 +36,10 @@ public class BlockLevelSimple : BlockLevel
     public override GameObject CreateBlock() {
         var tmpBlock = BlockClickSpawner.Instantiate(GetPrefab(), BlockClickSpawner.instance.transform);
         tmpBlock.name = $"Block_{BlockClickSpawner.instance.blocks.Count}";
-        tmpBlock.transform.localScale = new Vector3(
-            Mathf.Lerp(minWidth, maxWidth, ConsistentRandom.NextRandom()),
-            Mathf.Lerp(minHeight, maxHeight, ConsistentRandom.NextRandom()),
-            1
-        );
+        var x = Mathf.Lerp(minWidth, maxWidth, ConsistentRandom.NextRandom());
+        var y = Mathf.Lerp(minWidth, maxWidth, ConsistentRandom.NextRandom());
+        tmpBlock.transform.localScale = new Vector3(x, y, 1);
+        tmpBlock.transform.Find("States").transform.localScale = new Vector3(Block.STATE_SCALE * (1f / x), Block.STATE_SCALE * (1f / y), 1);
         tmpBlock.GetComponent<Block>().Start();
 
         var color = setColor != BlockColors.INERT ? setColor : BlockClickSpawner.RandomColor();

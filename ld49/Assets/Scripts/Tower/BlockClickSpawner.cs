@@ -7,6 +7,7 @@ public class BlockClickSpawner : MonoBehaviour
 {
     private const int BLOCKS_PER_LEVEL = 10;
     private const float ROTATE_SPEED = 1f;
+    private const float MIN_MOUSE_Y = 0.5f;
 
     public static BlockClickSpawner instance;
 
@@ -39,9 +40,9 @@ public class BlockClickSpawner : MonoBehaviour
     {
         levels = new List<BlockLevel> {
             new BlockLevelSimple(blockPrefab),
-            new BlockLevelSimple(blockPrefab, 0.25f, 2, 0.25f, 2),
+            new BlockLevelSimple(blockPrefab, 0.3f, 2.5f, 0.3f, 2.5f),
             new BlockLevelSimple(blockPrefab, 1, 1, 1, 1, BlockColors.BLUE),
-            new BlockLevelSimple(blockPrefab, 0.2f, 4, 0.2f, 4),
+            new BlockLevelSimple(blockPrefab, 0.3f, 5, 0.3f, 5),
         };
     }
 
@@ -79,7 +80,7 @@ public class BlockClickSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ScoreTracker.instance.gameInProgress && Input.GetMouseButtonDown(0)) {
+        if (ScoreTracker.instance.gameInProgress && Input.GetMouseButtonDown(0)/* && InputUtility.instance.MouseToWorldZeroed().y > MIN_MOUSE_Y*/) {
             NextBlock();
         }
 
@@ -93,6 +94,10 @@ public class BlockClickSpawner : MonoBehaviour
         if (nextBlock != null)
         {
             nextBlock.transform.position = InputUtility.instance.MouseToWorldZeroed();
+            //if (nextBlock.transform.position.y <= MIN_MOUSE_Y)
+            //{
+            //    nextBlock.transform.position = Vector3.down * 100f;
+            //}
         }
     }
 
