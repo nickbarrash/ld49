@@ -9,6 +9,7 @@ public class DangerGround : MonoBehaviour
         ScoreTracker.instance.GameOver();
         BlockClickSpawner.instance.GameOver();
         GameOverUI.instance.SetVisible(true);
+        LevelDescriptionDisplay.instance.GameOver();
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {

@@ -94,10 +94,10 @@ public class Leaderboard : MonoBehaviour
 
     public void DisplaySubmit()
     {
+        leaderboardSubmissionPanel.SetActive(NewHighScore());
         if (NewHighScore())
         {
             DisplayGameOver(false);
-            leaderboardSubmissionPanel.SetActive(NewHighScore());
             UpdateSubmitButton();
         } else {
             DisplayGameOver(true);

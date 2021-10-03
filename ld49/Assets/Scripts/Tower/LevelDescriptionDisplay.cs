@@ -28,6 +28,19 @@ public class LevelDescriptionDisplay : MonoBehaviour {
 
     bool init = false;
 
+    public static LevelDescriptionDisplay instance;
+
+    private void Awake() {
+        if (instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+
+        instance = this;
+    }
+
+
     private void Start() {
         if (!init) {
             init = true;
@@ -46,6 +59,12 @@ public class LevelDescriptionDisplay : MonoBehaviour {
         SetAlpha(1); 
         yield return new WaitForSeconds(showForSec);
         FadeOut();
+    }
+
+    public void GameOver()
+    {
+        descriptionsToDisplay.Clear();
+        activeDescription = null;
     }
 
     private void FadeOut()
