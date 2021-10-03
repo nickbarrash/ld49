@@ -632,10 +632,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 44a9759b-aed3-4da0-8bcb-5b87b91a7553
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: ld49
+  organizationId: graybear209
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

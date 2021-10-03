@@ -31,6 +31,8 @@ public class BlockClickSpawner : MonoBehaviour
 
     public Fader clickToPlaceInstruction;
 
+    public GameObject QWTip;
+
     [HideInInspector]
     public bool placingFirstBlock = false;
 
@@ -120,7 +122,10 @@ public class BlockClickSpawner : MonoBehaviour
     public void RotateNextBlock(bool clockwise)
     {
         if (ScoreTracker.instance.gameInProgress && nextBlock != null )
+        {
             nextBlock.transform.Rotate(Vector3.forward, clockwise ? -1 * ROTATE_SPEED : ROTATE_SPEED);
+            QWTip.SetActive(false);
+        }
     }
 
     public static BlockColors RandomColor()

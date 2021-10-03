@@ -23,7 +23,7 @@ public class Block : MonoBehaviour
 
     public readonly static Dictionary<BlockColors, Color> BLOCK_COLOR_MAP = new Dictionary<BlockColors, Color>() {
         {BlockColors.RED, Color.red},
-        {BlockColors.BLUE, Color.blue},
+        {BlockColors.BLUE, new Color(0.1f, 0.1f, 1)},
         {BlockColors.YELLOW, Color.yellow},
         {BlockColors.INERT, Color.green}
     };
@@ -168,7 +168,7 @@ public class Block : MonoBehaviour
         this.color = color;
         var baseColor = BLOCK_COLOR_MAP[color];
         if (!realized)
-            baseColor = new Color (baseColor.r, baseColor.g, baseColor.b, 0.2f);
+            baseColor = new Color (baseColor.r, baseColor.g, baseColor.b, 0.35f);
 
         SetColor(baseColor);
     }
