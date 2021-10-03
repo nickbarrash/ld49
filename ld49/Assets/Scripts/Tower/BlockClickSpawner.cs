@@ -6,7 +6,7 @@ using UnityEngine;
 public class BlockClickSpawner : MonoBehaviour
 {
     private const int BLOCKS_PER_LEVEL = 10;
-    private const float ROTATE_SPEED = 0.75f;
+    private const float ROTATE_SPEED = 1f;
 
     public static BlockClickSpawner instance;
 
